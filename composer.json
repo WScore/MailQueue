@@ -1,0 +1,12 @@
+{
+    "name": "wscore/mailqueue",
+    "description": "a mailer from database queue",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Wscore\\Mailqueue\\": "src/"
+        }
+    },
+    "require": {}
+}
