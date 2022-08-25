@@ -4,4 +4,14 @@
             <directory>tests</directory>
         </testsuite>
     </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src/</directory>
+            <file>/path/to/file</file>
+            <exclude>
+                <directory suffix=".php">vendor</directory>
+                <file>vendor/autoload</file>
+            </exclude>
+        </whitelist>
+    </filter>
 </phpunit>
