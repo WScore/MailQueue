@@ -8,5 +8,11 @@
             "Wscore\\Mailqueue\\": "src/"
         }
     },
-    "require": {}
+    "require": {
+      "ext-pdo": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
 }
