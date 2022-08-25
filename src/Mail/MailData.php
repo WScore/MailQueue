@@ -2,14 +2,18 @@
 
 class MailData
 {
+    private $mail_id;
+    private $que_id;
+    private $status;
     private $to = [];
-    private $from;
+    private $mail_from;
     private $replyTo;
     private $cc = [];
     private $bcc = [];
     private $subject = '';
     private $text = '';
     private $html = '';
+    private $options = [];
 
     public function addTo(string $mail, string $name = null): MailData
     {
@@ -19,7 +23,7 @@ class MailData
 
     public function setFrom(string $mail, string $name = null): MailData
     {
-        $this->from = new MailAddress($mail, $name);
+        $this->mail_from = new MailAddress($mail, $name);
         return $this;
     }
 
@@ -41,19 +45,36 @@ class MailData
         return $this;
     }
 
-    public function setSubject(string $subject)
+    public function addOption(string $key, string $value): MailData
+    {
+        $this->options[] = [$key, $value];
+        return $this;
+    }
+
+    public function setSubject(string $subject): MailData
     {
         $this->subject = $subject;
+        return $this;
     }
 
-    public function setText(string $text)
+    public function setText(string $text): MailData
     {
         $this->text = $text;
+        return $this;
     }
 
-    public function setHtml(string $html)
+    public function setHtml(string $html): MailData
     {
         $this->html = $html;
+        return $this;
+    }
+
+    /**
+     * @return string|int
+     */
+    public function getMailId()
+    {
+        return $this->mail_id;
     }
 
     /**
@@ -69,7 +90,7 @@ class MailData
      */
     public function getFrom(): MailAddress
     {
-        return $this->from;
+        return $this->mail_from;
     }
 
     /**
@@ -118,5 +139,13 @@ class MailData
     public function getHtml(): string
     {
         return $this->html;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
     }
 }

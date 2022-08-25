@@ -34,9 +34,14 @@ class MailAddress
 
     public function toJSON(): string
     {
+        return \json_encode($this->toArray());
+    }
+
+    public function toArray(): array
+    {
         if ($this->hasName()) {
-            return json_encode(['address' => $this->getAddress()]);
+            return ['address' => $this->getAddress()];
         }
-        return json_encode(['address' => $this->getAddress(), 'name' => $this->getName()]);
+        return ['address' => $this->getAddress(), 'name' => $this->getName()];
     }
 }
