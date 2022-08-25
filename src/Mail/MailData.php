@@ -1,4 +1,7 @@
 <?php
+declare(strict_types=1);
+
+namespace WScore\MailQueue\Mail;
 
 class MailData
 {

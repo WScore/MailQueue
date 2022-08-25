@@ -1,4 +1,15 @@
 <?php
+declare(strict_types=1);
+
+namespace WScore\MailQueue\Queue;
+
+use DateTimeImmutable;
+use DateTimeInterface;
+use PDO;
+use RuntimeException;
+use WScore\MailQueue\Mail\MailAddress;
+use WScore\MailQueue\Mail\MailData;
+use WScore\MailQueue\Mail\MailStatus;
 
 class SaveQueue
 {

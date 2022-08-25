@@ -1,4 +1,9 @@
 <?php
+declare(strict_types=1);
+
+namespace WScore\MailQueue\Mail;
+
+use function json_encode;
 
 class MailAddress
 {
@@ -29,19 +34,19 @@ class MailAddress
 
     public function hasName(): bool
     {
-        return !$this->getName();
+        return (bool) $this->getName();
     }
 
     public function toJSON(): string
     {
-        return \json_encode($this->toArray());
+        return json_encode($this->toArray(), JSON_UNESCAPED_UNICODE);
     }
 
     public function toArray(): array
     {
         if ($this->hasName()) {
-            return ['address' => $this->getAddress()];
+            return ['address' => $this->getAddress(), 'name' => $this->getName()];
         }
-        return ['address' => $this->getAddress(), 'name' => $this->getName()];
+        return ['address' => $this->getAddress()];
     }
 }

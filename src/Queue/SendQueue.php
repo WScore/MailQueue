@@ -1,4 +1,10 @@
 <?php
+declare(strict_types=1);
+
+namespace WScore\MailQueue\Queue;
+
+use PDO;
+use WScore\MailQueue\Sender\SenderInterface;
 
 class SendQueue
 {
