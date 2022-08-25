@@ -1,12 +1,14 @@
 <?php
+/** @noinspection SqlNoDataSourceInspection */
+
 declare(strict_types=1);
 
 namespace WScore\MailQueue\Queue;
 
 use PDO;
 use WScore\MailQueue\Mail\MailData;
+use WScore\MailQueue\Mail\MailStatus;
 
-/** @noinspection SqlNoDataSourceInspection */
 
 class QueueDba
 {
