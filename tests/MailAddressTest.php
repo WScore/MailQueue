@@ -41,4 +41,11 @@ class MailAddressTest extends TestCase
         $this->assertEquals($array, $address->toArray());
         $this->assertEquals(json_encode($array), $address->toJSON());
     }
+
+    public function testForgeFromArray()
+    {
+        $address = MailAddress::fromArray(['address' => 'test@example.com', 'name' => 'test example']);
+        $this->assertEquals('test@example.com', $address->getAddress());
+        $this->assertEquals('test example', $address->getName());
+    }
 }

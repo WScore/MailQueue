@@ -31,5 +31,16 @@ class MailDataTest extends TestCase
         $this->assertEquals('bcc@example.com', $mail->getBcc()[0]->getAddress());
         $this->assertEquals('opt1', $mail->getOptions()[0][0]);
         $this->assertEquals('value1', $mail->getOptions()[0][1]);
+
+        $this->assertEquals('subject text', $mail->getSubject());
+        $this->assertEquals('body text', $mail->getText());
+        $this->assertEquals('body html', $mail->getHtml());
+    }
+
+    public function testNewMailDataHasNoMailId()
+    {
+        $mail = new MailData();
+        $mail->addTo('to@example.com', 'to-name');
+        $this->assertEquals('', $mail->getMailId());
     }
 }
