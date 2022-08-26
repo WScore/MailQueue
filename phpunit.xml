@@ -1,17 +1,17 @@
-<phpunit bootstrap="vendor/autoload.php">
-    <testsuites>
-        <testsuite name="MailQue">
-            <directory>tests</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src/</directory>
-            <file>/path/to/file</file>
-            <exclude>
-                <directory suffix=".php">vendor</directory>
-                <file>vendor/autoload</file>
-            </exclude>
-        </whitelist>
-    </filter>
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">src/</directory>
+    </include>
+    <exclude>
+      <directory suffix=".php">vendor</directory>
+      <file>vendor/autoload</file>
+    </exclude>
+  </coverage>
+  <testsuites>
+    <testsuite name="MailQue">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
 </phpunit>
