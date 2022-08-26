@@ -52,8 +52,9 @@ class QueueDba
         }
         $columns = implode(', ', $colList);
         $values = implode(', ', $valList);
-        $sql = "INSERT INTO {$this->table} ({$columns} VALUES ({$values}));";
-        return (bool)$this->pdo->exec($sql);
+        $sql = "INSERT INTO {$this->table} ({$columns}) VALUES ({$values});";
+        $stm = $this->pdo->prepare($sql);
+        return $stm->execute($data);
     }
 
     /**

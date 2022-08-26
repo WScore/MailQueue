@@ -3,24 +3,63 @@ declare(strict_types=1);
 
 namespace WScore\MailQueue\Mail;
 
+use stdClass;
+
+use function json_decode;
+
 class MailData
 {
     private $mail_id;
     private $que_id;
     private $status;
-    private $to = [];
+    private $mail_to = [];
     private $mail_from;
-    private $replyTo;
+    private $reply_to;
     private $cc = [];
     private $bcc = [];
     private $subject = '';
-    private $text = '';
-    private $html = '';
+    private $body_text = '';
+    private $body_html = '';
     private $options = [];
+
+    public function __construct()
+    {
+        if ($this->mail_id) {
+            $this->convertMeFromDataBase();
+        }
+    }
+
+    private function convertMeFromDataBase()
+    {
+        $this->mail_from = $this->toAddress(json_decode($this->mail_from, true));
+        $this->reply_to = $this->toAddress(json_decode($this->reply_to, true));
+        $this->mail_to = $this->toAddressList(json_decode((string)$this->mail_to, true));
+        $this->cc = $this->toAddressList(json_decode((string)$this->cc, true));
+        $this->bcc = $this->toAddressList(json_decode((string)$this->bcc, true));
+        $this->options = json_decode((string)$this->options, true);
+    }
+
+    private function toAddress(array $data): MailAddress
+    {
+        return MailAddress::fromArray($data);
+    }
+
+    /**
+     * @param array $data
+     * @return MailAddress[]
+     */
+    private function toAddressList(array $data): array
+    {
+        $list = [];
+        foreach ($data as $datum) {
+            $list[] = MailAddress::fromArray($datum);
+        }
+        return $list;
+    }
 
     public function addTo(string $mail, string $name = null): MailData
     {
-        $this->to[] = new MailAddress($mail, $name);
+        $this->mail_to[] = new MailAddress($mail, $name);
         return $this;
     }
 
@@ -32,7 +71,7 @@ class MailData
 
     public function setReplyTo(string $mail, string $name = null): MailData
     {
-        $this->replyTo = new MailAddress($mail, $name);
+        $this->reply_to = new MailAddress($mail, $name);
         return $this;
     }
 
@@ -62,13 +101,13 @@ class MailData
 
     public function setText(string $text): MailData
     {
-        $this->text = $text;
+        $this->body_text = $text;
         return $this;
     }
 
     public function setHtml(string $html): MailData
     {
-        $this->html = $html;
+        $this->body_html = $html;
         return $this;
     }
 
@@ -85,7 +124,7 @@ class MailData
      */
     public function getTo(): array
     {
-        return $this->to;
+        return $this->mail_to;
     }
 
     /**
@@ -101,7 +140,7 @@ class MailData
      */
     public function getReplyTo(): MailAddress
     {
-        return $this->replyTo;
+        return $this->reply_to;
     }
 
     /**
@@ -133,7 +172,7 @@ class MailData
      */
     public function getText(): string
     {
-        return $this->text;
+        return $this->body_text;
     }
 
     /**
@@ -141,7 +180,7 @@ class MailData
      */
     public function getHtml(): string
     {
-        return $this->html;
+        return $this->body_html;
     }
 
     /**
@@ -150,5 +189,10 @@ class MailData
     public function getOptions(): array
     {
         return $this->options;
+    }
+
+    public function getQueId(): ?string
+    {
+        return $this->que_id;
     }
 }

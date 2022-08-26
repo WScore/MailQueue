@@ -4,7 +4,7 @@
 
 CREATE TABLE mail_queue
 (
-    mail_id    INTEGER AUTOINCREMENT,
+    mail_id    INTEGER PRIMARY KEY AUTOINCREMENT,
     que_id     TEXT,
     status     VARCHAR(16) NOT NULL,
     mail_to    TEXT        NOT NULL,
@@ -17,6 +17,5 @@ CREATE TABLE mail_queue
     body_text  TEXT,
     body_html  TEXT,
     created_at DATETIME NOT NULL,
-    send_at    DATETIME,
-    PRIMARY KEY (mail_id)
+    send_at    DATETIME
 );
