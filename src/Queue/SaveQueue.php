@@ -36,7 +36,7 @@ class SaveQueue
 
     public static function forgeWithQueId(PDO $pdo, $table = 'mail_queue'): SaveQueue
     {
-        $self =new self(new QueueDba($pdo, $table));
+        $self =new self(new QueueDba($pdo));
         $self->createQueId();
         return $self;
     }
@@ -47,7 +47,7 @@ class SaveQueue
         return $this;
     }
 
-    private function createQueId()
+    public function createQueId()
     {
         foreach (range(0, 5) as $item) {
             $que_id = date('YmdHis-') . md5(uniqid());
@@ -56,7 +56,7 @@ class SaveQueue
                 return;
             }
         }
-        throw new RuntimeException('failed assing unique que_id!');
+        throw new RuntimeException('failed assign unique que_id!');
     }
 
     public function save(MailData $mailData)

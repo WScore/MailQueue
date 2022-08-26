@@ -195,4 +195,9 @@ class MailData
     {
         return $this->que_id;
     }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
 }

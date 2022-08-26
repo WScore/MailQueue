@@ -36,6 +36,7 @@ class QueueDba
                           'que_id' => $que_id,
                       ]);
         $result = $stm->fetch(PDO::FETCH_ASSOC);
+        if ($result === false) return true;
         if (count($result) > 0) {
             return false;
         }
