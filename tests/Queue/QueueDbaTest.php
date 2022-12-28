@@ -1,6 +1,5 @@
 <?php
 use PHPUnit\Framework\TestCase;
-use WScore\MailQueue\Mail\MailData;
 use WScore\MailQueue\Mail\MailToArray;
 use WScore\MailQueue\Queue\QueueDba;
 

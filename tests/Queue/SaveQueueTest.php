@@ -75,22 +75,22 @@ class SaveQueueTest extends TestCase
 
         $this->assertTrue((bool) $mail->getMailId()); // check saved!
 
-        $this->dba->success($mail);
-        $mailOK = $this->getMailFromQueId($queId);
-        $this->assertEquals(MailStatus::SENT, $mailOK->getStatus());
-
         $this->dba->failed($mail);
         $mailOK = $this->getMailFromQueId($queId);
         $this->assertEquals(MailStatus::FAILED, $mailOK->getStatus());
+
+        $this->dba->success($mail);
+        $mailOK = $this->getMailFromQueId($queId);
+        $this->assertNull($mailOK);
     }
 
     /**
      * @param string|null $queId
-     * @return MailData
+     * @return ?MailData
      */
-    private function getMailFromQueId(?string $queId): MailData
+    private function getMailFromQueId(?string $queId): ?MailData
     {
         $list = $this->dba->listByQueId($queId);
-        return $list[0];
+        return $list[0] ?? null;
     }
 }

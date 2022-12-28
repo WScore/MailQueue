@@ -21,10 +21,18 @@ class QueueDba
      */
     private $table;
 
+    private $onSuccess = 'remove';
+
     public function __construct(PDO $pdo, string $table = 'mail_queue')
     {
         $this->pdo = $pdo;
         $this->table = $table;
+    }
+
+    public function onSuccess($action = 'remove'): QueueDba
+    {
+        $this->onSuccess = $action;
+        return $this;
     }
 
     public function isQueIdUnique(string $que_id): bool
@@ -75,7 +83,11 @@ class QueueDba
     public function success(MailData $mailData)
     {
         $mail_id = $mailData->getMailId();
-        $this->updateStatus($mail_id, MailStatus::SENT);
+        if ($this->onSuccess === 'remove') {
+            $this->removeMail($mail_id);
+        } else {
+            $this->updateStatus($mail_id, MailStatus::SENT);
+        }
     }
 
     public function failed(MailData $mailData)
@@ -90,6 +102,15 @@ class QueueDba
         $stm = $this->pdo->prepare($sql);
         $stm->execute([
                           'status' => $status,
+                          'mail_id' => $mail_id,
+                      ]);
+    }
+
+    private function removeMail($mail_id)
+    {
+        $sql = "DELETE FROM {$this->table} WHERE mail_id = :mail_id";
+        $stm = $this->pdo->prepare($sql);
+        $stm->execute([
                           'mail_id' => $mail_id,
                       ]);
     }
