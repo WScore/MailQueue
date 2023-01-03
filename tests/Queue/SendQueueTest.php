@@ -58,4 +58,25 @@ class SendQueueTest extends TestCase
         $this->assertEquals('first mail', $sendMails[0]->getSubject());
         $this->assertEquals('second mail', $sendMails[1]->getSubject());
     }
+
+    public function testSendErrorException()
+    {
+        $queId = 'test que';
+        $this->save->withQueId($queId);
+        $mail = $this->createMailData();
+        $mail->setSubject('first mail');
+        $this->save->save($mail);
+        $mail->setSubject('throw e');
+        $this->save->save($mail);
+
+        $this->queue->sendQueId($queId);
+        $sendMails = $this->sender->getMails();
+
+        $list = $this->dba->listByQueId($queId);
+        $this->assertEquals(1, count($list));
+        $mailFailed = $list[0];
+        $this->assertEquals('throw e', $mailFailed->getSubject());
+        $this->assertEquals('FAILED', $mailFailed->getStatus());
+        $this->assertEquals('thrown an exception', $mailFailed->getSendMsg());
+    }
 }
