@@ -1,0 +1,18 @@
+{
+    "name": "wscore/mailqueue",
+    "description": "a mailer from database queue",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "WScore\\MailQueue\\": "src/"
+        }
+    },
+    "require": {
+      "ext-pdo": "*",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
