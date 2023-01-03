@@ -1,5 +1,6 @@
 <?php
 use PHPUnit\Framework\TestCase;
+use WScore\MailQueue\Mail\MailStatus;
 use WScore\MailQueue\Mail\MailToArray;
 use WScore\MailQueue\Queue\QueueDba;
 
@@ -40,5 +41,27 @@ class QueueDbaTest extends TestCase
         $mail2 = $list[0];
         $this->assertEquals($queId, $mail2->getQueId());
         $this->compareMails($mail2, $mail);
+    }
+
+    public function testUpdateMethod()
+    {
+        $mail = $this->createMailData();
+
+        $converter = new MailToArray();
+        $data = $converter->toArray($mail);
+        $queId = 'update-test';
+        $data['que_id'] = $queId;
+        $data['status'] = MailStatus::READY;
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $this->dba->persist($data);
+
+        $mail1 = $this->dba->listByQueId($queId)[0];
+        $this->assertEquals('', $mail1->getSendMsg());
+
+        $this->dba->updateStatus($mail1->getMailId(), MailStatus::FAILED, 'bad message');
+
+        $mail2 = $this->dba->listByQueId($queId)[0];
+        $this->assertEquals(MailStatus::FAILED, $mail2->getStatus());
+        $this->assertEquals('bad message', $mail2->getSendMsg());
     }
 }

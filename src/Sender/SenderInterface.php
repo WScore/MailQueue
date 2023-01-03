@@ -7,5 +7,10 @@ use WScore\MailQueue\Mail\MailData;
 
 interface SenderInterface
 {
+    /**
+     * @param MailData $mailData
+     * @return bool
+     * @throws SendErrorException
+     */
     public function send(MailData $mailData): bool;
 }

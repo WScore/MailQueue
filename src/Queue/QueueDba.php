@@ -96,12 +96,16 @@ class QueueDba
         $this->updateStatus($mail_id, MailStatus::FAILED);
     }
 
-    private function updateStatus($mail_id, string $status)
+    public function updateStatus($mail_id, string $status, string $message = null)
     {
-        $sql = "UPDATE {$this->table} SET status = :status WHERE mail_id = :mail_id";
+        $sql = "
+            UPDATE {$this->table} 
+            SET status = :status, send_msg = :message 
+            WHERE mail_id = :mail_id";
         $stm = $this->pdo->prepare($sql);
         $stm->execute([
                           'status' => $status,
+                          'message' => $message,
                           'mail_id' => $mail_id,
                       ]);
     }

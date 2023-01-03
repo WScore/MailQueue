@@ -12,6 +12,7 @@ class MailData
     private $mail_id;
     private $que_id;
     private $status;
+    private $send_msg;
     private $mail_to = [];
     private $mail_from;
     private $reply_to;
@@ -199,5 +200,10 @@ class MailData
     public function getStatus(): ?string
     {
         return $this->status;
+    }
+
+    public function getSendMsg(): ?string
+    {
+        return $this->send_msg;
     }
 }

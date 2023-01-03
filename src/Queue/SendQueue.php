@@ -6,6 +6,7 @@ namespace WScore\MailQueue\Queue;
 use PDO;
 use WScore\MailQueue\Mail\MailStatus;
 use WScore\MailQueue\Sender\SenderInterface;
+use WScore\MailQueue\Sender\SendErrorException;
 
 class SendQueue
 {
@@ -41,10 +42,14 @@ class SendQueue
         $list = $this->dba->listByQueId($que_id);
         foreach ($list as $mailData) {
             if ($mailData->getStatus() === MailStatus::READY) {
-                if ($this->sender->send($mailData)) {
-                    $this->dba->success($mailData);
-                } else {
-                    $this->dba->failed($mailData);
+                try {
+                    if ($this->sender->send($mailData)) {
+                        $this->dba->success($mailData);
+                    } else {
+                        $this->dba->failed($mailData);
+                    }
+                } catch (SendErrorException $e) {
+                    $this->dba->updateStatus($mailData->getMailId(), $e->getMailStatus(), $e->getMessage());
                 }
             }
         }
