@@ -80,6 +80,21 @@ class QueueDba
         return $stm->fetchAll(PDO::FETCH_CLASS, MailData::class);
     }
 
+    /**
+     * @param string $que_id
+     * @return MailData[]|\PDOStatement|false
+     */
+    public function fetchStmtByQueId(string $que_id)
+    {
+        $sql = "SELECT * FROM {$this->table} WHERE que_id = :que_id";
+        $stm = $this->pdo->prepare($sql);
+        $stm->execute([
+                          'que_id' => $que_id,
+                      ]);
+        $stm->setFetchMode(PDO::FETCH_CLASS, MailData::class);
+        return $stm;
+    }
+
     public function success(MailData $mailData)
     {
         $mail_id = $mailData->getMailId();

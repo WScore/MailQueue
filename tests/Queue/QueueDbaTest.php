@@ -43,6 +43,26 @@ class QueueDbaTest extends TestCase
         $this->compareMails($mail2, $mail);
     }
 
+    public function testFetchStmt()
+    {
+        $mail = $this->createMailData();
+
+        $converter = new MailToArray();
+        $data = $converter->toArray($mail);
+        $queId = 'col que_id';
+        $data['que_id'] = $queId;
+        $data['status'] = 'TESTED';
+        $data['created_at'] = date('Y-m-d H:i:s');
+        $this->dba->persist($data);
+
+        $list = $this->dba->fetchStmtByQueId($queId);
+        // this assert fails for SQLite...
+        // $this->assertEquals(0, $list->rowCount());
+        $mail2 = $list->fetch();
+        $this->assertEquals($queId, $mail2->getQueId());
+        $this->compareMails($mail2, $mail);
+    }
+
     public function testUpdateMethod()
     {
         $mail = $this->createMailData();
