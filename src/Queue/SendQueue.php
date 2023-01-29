@@ -52,6 +52,8 @@ class SendQueue
                     }
                 } catch (SendErrorException $e) {
                     $this->dba->updateStatus($mailData->getMailId(), $e->getMailStatus(), $e->getMessage());
+                } catch (\Exception $e) {
+                    $this->dba->updateStatus($mailData->getMailId(), MailStatus::FAILED, $e->getMessage());
                 }
             }
         }
