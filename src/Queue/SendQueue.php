@@ -37,9 +37,11 @@ class SendQueue
         $this->sender = $sender;
     }
 
-    public function sendQueId(string $que_id)
+    public function sendQueId(string $que_id, bool $useStmt = false)
     {
-        $list = $this->dba->listByQueId($que_id);
+        $list = $useStmt
+            ? $this->dba->fetchStmtByQueId($que_id)
+            : $this->dba->listByQueId($que_id);
         foreach ($list as $mailData) {
             if ($mailData->getStatus() === MailStatus::READY) {
                 try {
